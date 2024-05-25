@@ -8,11 +8,10 @@ from authorization.managers import UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    ADMIN, SALESMAN, CUSTOMER = 1, 2, 3
+    ADMIN, CUSTOMER = 1, 2
 
     ROLES = (
         (ADMIN, 'admin'),
-        (SALESMAN, 'salesman'),
         (CUSTOMER, 'customer'),
     )
 
@@ -22,6 +21,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+
+    first_name = models.CharField(max_length=100, null=True, blank=True)
+    last_name = models.CharField(max_length=100, null=True, blank=True)
+    phone_number = models.CharField(max_length=100, null=True, blank=True)
 
     objects = UserManager()
 
