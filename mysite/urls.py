@@ -21,7 +21,8 @@ from mysite import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', include('authorization.urls'))
+    path('auth/', include('authorization.urls')),
+    path('shop/', include('shop.urls')),
 ]
 
 
