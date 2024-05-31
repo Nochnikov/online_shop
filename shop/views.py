@@ -1,6 +1,6 @@
-from shop.models import Product
+from shop.models import Product, Category
 from rest_framework import generics, mixins
-from shop.serializers import AddProductSerializer
+from shop.serializers import AddProductSerializer, CategorySerializer, OrderSerializer
 
 
 # Create your views here.
@@ -21,4 +21,14 @@ class ProductListView(generics.ListAPIView):
         And the newest and eldest items 
         via category
     '''
+
+class CategoryListView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+class MakeOrderView(generics.CreateAPIView):
+    queryset = CategoryListView
+    serializer_class = OrderSerializer
+
+
 
