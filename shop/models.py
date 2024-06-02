@@ -21,6 +21,8 @@ class Product(models.Model):
     image = models.ImageField(upload_to='images/', null=True, blank=True)
     seller = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, default=1)
 
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return f'{self.name} : {self.description}'
 
