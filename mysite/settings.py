@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'shop',
+    'chat',
     'authorization',
     'rest_framework',
     'django_extensions',
