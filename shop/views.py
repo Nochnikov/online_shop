@@ -1,7 +1,8 @@
-from shop.models import Product, Category
+from shop.models import Product, Category, Order
 from rest_framework import generics, mixins
 from shop.serializers import AddProductSerializer, CategorySerializer, OrderSerializer, RetrieveProductSerializer
 from shop.filters import ProductFilter
+from rest_framework import permissions
 
 
 # Create your views here.
@@ -20,13 +21,21 @@ class ProductListView(generics.ListAPIView):
     filterset_class = ProductFilter
 
 
-class ProductDetailView(generics.RetrieveAPIView):
+class ProductDetailDestroyUpdateView(generics.GenericAPIView,
+                                     mixins.RetrieveModelMixin,
+                                     mixins.UpdateModelMixin,
+                                     mixins.DestroyModelMixin):
     queryset = Product.objects.all()
     serializer_class = RetrieveProductSerializer
 
-    """
-        Seller can update his product as he wants. Include it. 
-    """
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
 
 
 class CategoryListView(generics.ListAPIView):
@@ -38,16 +47,26 @@ class CategoryDetailView(generics.RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-    """Only admins can update categories. Include it"""
+    permission_classes = [permissions.DjangoModelPermissionsOrAnonReadOnly]
 
 
-class CategoryCreateView(generics.CreateAPIView):
+class CategoryCreateDeleteView(generics.GenericAPIView,
+                               mixins.CreateModelMixin,
+                               mixins.DestroyModelMixin):
+    queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-    """Only admins can create categories. Include it"""
+    permissions_classes = [permissions.DjangoModelPermissions]
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
 
 class MakeOrCancelOrderView(generics.GenericAPIView, mixins.CreateModelMixin, mixins.UpdateModelMixin):
-    queryset = CategoryListView
+    queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
     def post(self, request, *args, **kwargs):
@@ -55,6 +74,11 @@ class MakeOrCancelOrderView(generics.GenericAPIView, mixins.CreateModelMixin, mi
 
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
+
     """
-        Person who wants to cancel order have to change only one field. Think what field!!
+        canceled = 1 
+        accepted = 2 
+        
+        Have to add in database side new filed like this in order to have ability to change the state 
+        of the order by one click. 
     """
