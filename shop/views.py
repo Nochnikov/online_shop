@@ -65,20 +65,29 @@ class CategoryCreateDeleteView(generics.GenericAPIView,
         return self.destroy(request, *args, **kwargs)
 
 
-class MakeOrCancelOrderView(generics.GenericAPIView, mixins.CreateModelMixin, mixins.UpdateModelMixin):
+class OrderListRetrieveCancelView(generics.GenericAPIView,
+                                  mixins.UpdateModelMixin,
+                                  mixins.ListModelMixin,
+                                  mixins.RetrieveModelMixin):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        if kwargs.get('pk') is not None:
+            return self.retrieve(request, *args, **kwargs)
+        return self.retrieve(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
+
+class MakeOrderView(generics.CreateAPIView):
+    serializer_class = OrderSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
     """
-        canceled = 1 
-        accepted = 2 
-        
-        Have to add in database side new filed like this in order to have ability to change the state 
-        of the order by one click. 
+        some problems here 
     """
+
