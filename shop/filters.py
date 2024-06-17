@@ -15,4 +15,5 @@ class ProductFilter(filters.FilterSet):
     newest = filters.DateFilter(field_name='created_at', lookup_expr='lte')
     oldest = filters.DateFilter(field_name='created_at', lookup_expr='gte')
 
-
+class CategoryFilter(filters.FilterSet):
+    category_name = filters.CharFilter(field_name='name', method=search_by_value)

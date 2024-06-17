@@ -1,9 +1,7 @@
-from django.http import Http404
-
 from shop.models import Product, Category, Order
 from rest_framework import generics, mixins
 from shop.serializers import AddProductSerializer, CategorySerializer, OrderSerializer, RetrieveProductSerializer
-from shop.filters import ProductFilter
+from shop.filters import ProductFilter, CategoryFilter
 from rest_framework import permissions
 
 # Create your views here.
@@ -42,6 +40,8 @@ class ProductDetailDestroyUpdateView(generics.GenericAPIView,
 class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+    filterset_class = CategoryFilter
 
 
 class CategoryUpdateDeleteDetailView(generics.GenericAPIView,
