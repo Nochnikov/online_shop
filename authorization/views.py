@@ -1,5 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework import generics, mixins
+from rest_framework.exceptions import ValidationError
+
 from authorization.serializers import RegisSerializer, ProfileSerializer
 
 from authorization.models import User
@@ -15,7 +17,10 @@ class RegisterView(generics.CreateAPIView):
 
     # To hash the password
     def create(self, request, *args, **kwargs):
-        request.data['password'] = make_password(request.data['password'])
+        if request.data.get('password') == request.data.get('password_rewrite'):
+            request.data['password'] = make_password(request.data['password'])
+        else:
+            raise ValidationError({'password': 'Passwords must match.'})
         return super().create(request, *args, **kwargs)
 
 
