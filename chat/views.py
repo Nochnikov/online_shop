@@ -17,7 +17,6 @@ class ListCreateChatView(generics.ListCreateAPIView):
         return qs
 
 
-
 class CreateListMessageView(generics.ListCreateAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
@@ -32,4 +31,7 @@ class CreateListMessageView(generics.ListCreateAPIView):
         seller_id = Product.objects.get(pk=product_id).seller_id
 
         serializer.save(cutsomer=self.request.user, seller=seller_id)
+
+
+
 
