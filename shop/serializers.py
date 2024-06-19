@@ -10,9 +10,10 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['username', 'email', 'phone_number']
 
 class AddProductSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Product
-        fields = ['name', 'price', 'description', 'image', 'category']
+        fields = ['pk', 'name', 'price', 'description', 'image', 'category', 'seller']
 
 class RetrieveProductSerializer(serializers.ModelSerializer):
 
