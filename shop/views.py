@@ -1,8 +1,11 @@
+from rest_framework.response import Response
+
 from shop.models import Product, Category, Order
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, views, status
 from shop.serializers import AddProductSerializer, CategorySerializer, OrderSerializer, RetrieveProductSerializer
 from shop.filters import ProductFilter, CategoryFilter
 from rest_framework import permissions
+
 
 # Create your views here.
 
@@ -62,8 +65,8 @@ class CategoryUpdateDeleteDetailView(generics.GenericAPIView,
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
-class CategoryCreateView(generics.CreateAPIView):
 
+class CategoryCreateView(generics.CreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
@@ -89,17 +92,20 @@ class OrderListRetrieveCancelView(generics.GenericAPIView,
 class MakeOrderView(generics.CreateAPIView):
     serializer_class = OrderSerializer
 
-    def perform_create(self, serializer):
-        product_id = self.kwargs.get('product_id')
+    def post(self, request, *args, **kwargs):
+
+        product_id = kwargs.get("product_id")
+        user = self.request.user
 
         try:
-            product = Product.objects.all().get(pk=product_id)
+            price = Product.objects.all().get(pk=product_id).price
         except Exception:
-            raise f"Product with id {product_id} does not exist"
+            raise {"message": f"Product with ID {product_id} does not exist"}
 
-        order = serializer.save(user=self.request.user)
+        order = Order.objects.create(user=user, total_price=0)
 
-        order.order_item.add(product)
-        order.total_price = product.price
+        order.order_item.add(product_id)
+        order.total_price = float(price) * 0.3
         order.save()
 
+        return Response({"message": "Order created"})
