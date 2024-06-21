@@ -83,7 +83,7 @@ class OrderListRetrieveCancelView(generics.GenericAPIView,
     def get(self, request, *args, **kwargs):
         if kwargs.get('pk') is not None:
             return self.retrieve(request, *args, **kwargs)
-        return self.retrieve(request, *args, **kwargs)
+        return self.list(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)

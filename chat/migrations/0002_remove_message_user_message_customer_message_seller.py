@@ -22,13 +22,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='message',
             name='customer',
-            field=models.ForeignKey(default=django.utils.timezone.now, on_delete=django.db.models.deletion.CASCADE, related_name='customer_messages', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='customer_messages', to=settings.AUTH_USER_MODEL),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='message',
             name='seller',
-            field=models.ForeignKey(default=datetime.datetime(2024, 6, 18, 11, 30, 18, 486544, tzinfo=datetime.timezone.utc), on_delete=django.db.models.deletion.CASCADE, related_name='seller_messages', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='seller_messages', to=settings.AUTH_USER_MODEL),
             preserve_default=False,
         ),
     ]

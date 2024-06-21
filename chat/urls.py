@@ -4,11 +4,11 @@ from chat.views import ListCreateChatView,  CreateListMessageView
 
 urlpatterns = [
     path('list/', ListCreateChatView.as_view(), name='chat_list'),
-    path('list/create/', ListCreateChatView.as_view(), name='chat_create'),
+    path('create/<int:product_id>/', ListCreateChatView.as_view(), name='chat_create'),
 
     #messsage
 
     path('messages/', CreateListMessageView.as_view(), name='messages_list'),
-    path('messages/<int:product_id>/', CreateListMessageView.as_view(), name='messages_create'),
+    path('messages/<int:chat_id>/', CreateListMessageView.as_view(), name='messages_create'),
 
 ]
